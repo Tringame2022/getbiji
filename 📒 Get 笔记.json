@@ -1,0 +1,235 @@
+{
+  "name": "📒 Get 笔记",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "save_get_biji",
+        "authentication": "headerAuth",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -272,
+        0
+      ],
+      "id": "5be4e155-a52b-4bfd-94fa-2b5484f5fcd1",
+      "name": "Webhook",
+      "webhookId": "5347aa3c-d1f7-4aa3-b726-dd4e36a163a1",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "PbphmEa2y8zjy2Rx",
+          "name": "自用Header"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://get-notes.luojilab.com/voicenotes/web/notes/stream",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Accept",
+              "value": "*/*"
+            },
+            {
+              "name": "Accept-Language",
+              "value": "zh-CN,zh;q=0.7"
+            },
+            {
+              "name": "Authorization",
+              "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOjIzODUzMCwiZW52IjoicHJvZHVjdGlvbiIsImV4cCI6MTc2MTMxNjg1NywiaWF0IjoxNzU4NzI0ODU3LCJpc3MiOiJkZGxsX29mZmljYWwifQ.OPVP6tl73-iYBXLxTh-wSDlniyaSK8OqoBSAKz89D3k"
+            },
+            {
+              "name": "Cache-Control",
+              "value": "no-cache"
+            },
+            {
+              "name": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "name": "Origin",
+              "value": "https://www.biji.com"
+            },
+            {
+              "name": "Pragma",
+              "value": "no-cache"
+            },
+            {
+              "name": "Referer",
+              "value": "https://www.biji.com/"
+            },
+            {
+              "name": "Sec-Fetch-Dest",
+              "value": "empty"
+            },
+            {
+              "name": "Sec-Fetch-Mode",
+              "value": "cors"
+            },
+            {
+              "name": "Sec-Fetch-Site",
+              "value": "cross-site"
+            },
+            {
+              "name": "Sec-GPC",
+              "value": "1"
+            },
+            {
+              "name": "User-Agent",
+              "value": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36"
+            },
+            {
+              "name": "X-Request-ID",
+              "value": "1758760144750"
+            },
+            {
+              "name": "sec-ch-ua",
+              "value": "\"Chromium\";v=\"140\", \"Not=A?Brand\";v=\"24\", \"Brave\";v=\"140\""
+            },
+            {
+              "name": "sec-ch-ua-mobile",
+              "value": "?0"
+            },
+            {
+              "name": "sec-ch-ua-platform",
+              "value": "\"macOS\""
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "=json",
+        "specifyBody": "json",
+        "bodyParameters": {
+          "parameters": [
+            {}
+          ]
+        },
+        "jsonBody": "={\n  \"attachments\":[{\"size\":100,\"type\":\"link\",\"title\":\"\",\"url\":\"{{ $json.url }}\"}],\n  \"content\":\"\",\n  \"entry_type\":\"ai\",\n  \"note_type\":\"link\",\n  \"source\":\"web\",\n  \"prompt_template_id\":\"\"\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        480,
+        0
+      ],
+      "id": "371ba064-624e-4a09-b8f2-327c6b3ba03d",
+      "name": "保存到Get笔记"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={\n  \"message\": \"保存好了，记得来看👀\"\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        -16,
+        0
+      ],
+      "id": "6db8b0f3-8ccd-44ea-837a-8a316357ae01",
+      "name": "Respond to Webhook"
+    },
+    {
+      "parameters": {
+        "content": "## 测试用例\n### 使用 CURL 命令\ncurl -X POST 'https://n8n.flashflock.com/webhook-test/save_get_biji' \\\n  -H 'Content-Type: application/json' \\\n  -d '{\"url\": \"https://mp.weixin.qq.com/s/_pP4622-VIWsbzCZWuXKEw\"}'\n\n### 使用手机上的捷径\n1. 复制一个要保存的链接\n2. 执行捷径（双击手机背部）\n",
+        "height": 304,
+        "width": 480
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -288,
+        176
+      ],
+      "typeVersion": 1,
+      "id": "95f0c7d2-c81d-4708-87a3-0291d9ae6184",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "jsCode": "// n8n Code (JavaScript) node\n// 输出：[{ json: { url: '...' } }, ...]  —— 每个网址一个 item（全局去重）\n\nconst URL_REGEX = /\\b((?:https?:\\/\\/|www\\.)[A-Za-z0-9\\-._~:/?#[\\]@!$&'()*+,;=%]+)(?=$|[\\s\"')\\]\\}，。！？、；])/gi;\n\n// 去掉结尾的中英文标点或引号类字符\nfunction trimTrailingPunct(u) {\n  return u.replace(/[)\"'’”\\]\\}\\uFF09]+$/u, '')     // 英文右括号/引号/全角右括号\n          .replace(/[，。！？、；…]+$/gu, '');      // 常见中文结尾标点\n}\n\n\nconst outputs = [];\nconst seen = new Set(); // 全局去重；若不需要去重，删除相关逻辑\n\nconst t = $input.first().json.body.url;\nlet m;\nwhile ((m = URL_REGEX.exec(t)) !== null) {\n  let url = trimTrailingPunct(m[1]);\n  if (url.startsWith('www.')) url = 'http://' + url; // 规范化无协议的 www 链接\n  if (!seen.has(url)) {\n    seen.add(url);\n    outputs.push({ json: { url } });\n  }\n}\n\nreturn outputs;\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        192,
+        0
+      ],
+      "id": "3662d765-0a7d-49f6-ad59-335215cbd30e",
+      "name": "Code in JavaScript"
+    }
+  ],
+  "pinData": {
+    "Respond to Webhook": [
+      {
+        "json": {
+          "body": {
+            "url": "8.97 09/22 hOX:/ q@e.oq 耐心不是毅力带来的结果而是具有长远目光的结果 # 耐心 # 成长 # 费曼学习法  https://v.douyin.com/RYhylVBmDHo/ 复制此链接，打开Dou音搜索，直接观看视频！",
+            "code": 2
+          }
+        }
+      }
+    ]
+  },
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "保存到Get笔记": {
+      "main": [
+        []
+      ]
+    },
+    "Respond to Webhook": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "保存到Get笔记",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "callerPolicy": "workflowsFromSameOwner",
+    "errorWorkflow": "RnKiNwhedMbLaNaF",
+    "timeSavedPerExecution": 1
+  },
+  "versionId": "7dc53f0f-affa-4ad1-9301-6ecf2754f1cf",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "62d009a67fe5901697153ecb2e26ec4404d739c9e5b61b72ca043aa4cd52bd0d"
+  },
+  "id": "YPgYdGp4v4cjaKsh",
+  "tags": []
+}
